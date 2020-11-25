@@ -1,12 +1,12 @@
 # Load the file and print the lenghth.
 
 IN_FILE = "/usr/share/dict/words"
-file1 = open(IN_FILE, 'r') 
+file1 = open(IN_FILE, 'r')
 words_w_newline = file1.readlines()
 words = []
 for w in words_w_newline:
     words.append(w.strip())
-print(len(words))
+# print(len(words))
 
 # organize the words into a map
 # len(word)->map(word -> set of letters in word)
