@@ -24,7 +24,7 @@ The dictionary will only contain lower case letters (a-z)
 
 output:
 ```
-$ python3 ./main.py 
+$ python3 ./main.py
 306 , 18 , 17 , chromochalcography , uninquisitiveness
 ```
 ```
@@ -40,7 +40,7 @@ Benchmark #1: python3 word_length_prod/py/main.py
 
 output:
 ```
-$ ./target/release/rust 
+$ ./target/release/rust
 prod 306
 len1 18
 len2 17
