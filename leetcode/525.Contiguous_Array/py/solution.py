@@ -17,14 +17,46 @@ Constraints:
 1 <= nums.length <= 105 
 nums[i] is either 0 or 1.
 """
-
-import numpy as np
+# import numpy as np
 
 class Solution(object):
 
     def findMaxLength(self, nums):
         # return(self.simple_brute_force_findMaxLength(nums))
-        return(self.complex_efficient_findMaxLength(nums))
+        # return(self.complex_efficient_findMaxLength(nums))
+        return(self.simpler_efficient_findMaxLength(nums))
+
+    def simpler_efficient_findMaxLength(self, nums):
+        """
+        Carry the cumulative sum, counting the number of '1's between
+        position 0 and i, minus the number of '0's between position 0 and i, but
+        there is no need to store the whole thing simultaneously.  
+
+        For each position, we record the first time we see that cumulative
+        sum (including 0 at position -1).  If we see that cumulative sum again,
+        we know that the number of '1's and '0's between the two positions is
+        the same.  We can then compare the size of the span to the largest span
+        seen so far.
+
+        :type nums: List[int]
+        :rtype: int
+        """
+        max_span_len = 0
+        cum_sum = 0
+        first_seen_dict = {0: -1}
+        for i, v in enumerate(nums):
+            if v == 1:
+                cum_sum += 1
+            else:
+                cum_sum -= 1
+            if cum_sum not in first_seen_dict:
+                first_seen_dict[cum_sum] = i
+            else:
+                span_len = i - first_seen_dict[cum_sum]
+                if span_len > max_span_len:
+                    max_span_len = span_len
+        return(max_span_len)
+
 
     def complex_efficient_findMaxLength(self, nums_as_list):
         """
