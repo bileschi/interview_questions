@@ -14,24 +14,8 @@ contiguous subarray with equal number of 0 and 1.
 
 Constraints:
 
-1 <= nums.length <= 105 nums[i] is either 0 or 1.Given a binary array nums,
-return the maximum length of a contiguous subarray with an equal number of 0 and
-1.
-
- 
-
-Example 1:
-
-Input: nums = [0,1] Output: 2 Explanation: [0, 1] is the longest contiguous
-subarray with an equal number of 0 and 1. Example 2:
-
-Input: nums = [0,1,0] Output: 2 Explanation: [0, 1] (or [1, 0]) is a longest
-contiguous subarray with equal number of 0 and 1.
- 
-
-Constraints:
-
-1 <= nums.length <= 105 nums[i] is either 0 or 1.
+1 <= nums.length <= 105 
+nums[i] is either 0 or 1.
 """
 
 import numpy as np
@@ -56,6 +40,7 @@ class Solution(object):
         """
         nums = np.array(nums_as_list)
         cumsum_diff = np.cumsum(nums == 1) - np.cumsum(nums == 0)
+        # initialize diff of 0 at position -1.
         first_of_this_diff = {0: -1}
         last_of_this_diff = {0: -1}
         for i in range(0, len(cumsum_diff)):
@@ -67,6 +52,8 @@ class Solution(object):
             if diff in last_of_this_diff:
                 if last_of_this_diff[diff] - first_of_this_diff[diff] > max_len:
                     max_len = last_of_this_diff[diff] - first_of_this_diff[diff]
+        # print('first_of_this_diff', first_of_this_diff)
+        # print('last_of_this_diff', last_of_this_diff)
         return(max_len)
 
     def simple_brute_force_findMaxLength(self, nums_as_list):

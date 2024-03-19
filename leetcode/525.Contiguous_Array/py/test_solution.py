@@ -9,5 +9,13 @@ class TestSolution(unittest.TestCase):
     self.assertEqual(s.findMaxLength([0,1,0,0,1,1,0]), 6)
     self.assertEqual(s.findMaxLength([0,0,0,1,1,1,0]), 6)
 
+  def test_edge_cases(self):
+    s = solution.Solution()
+    self.assertEqual(s.findMaxLength([]), 0)
+    self.assertEqual(s.findMaxLength([0]), 0)
+    self.assertEqual(s.findMaxLength([1]), 0)
+    self.assertEqual(s.findMaxLength([0,0,0,0]), 0)
+
+
 if __name__ == '__main__':
   unittest.main()
