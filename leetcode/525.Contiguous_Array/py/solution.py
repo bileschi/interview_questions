@@ -14,7 +14,7 @@ contiguous subarray with equal number of 0 and 1.
 
 Constraints:
 
-1 <= nums.length <= 105 
+1 <= nums.length <= 1e5 
 nums[i] is either 0 or 1.
 """
 # import numpy as np
@@ -108,3 +108,12 @@ class Solution(object):
                     if this_len > max_len:
                         max_len = this_len                    
         return max_len
+    
+
+if __name__ == '__main__':
+    import numpy as np
+    sol = Solution()
+    num_tests = 100
+    each_test_len = 1e5
+    for _ in range(num_tests):
+        sol.findMaxLength(list(np.random.randint(int(2), size=(int(each_test_len),))))
