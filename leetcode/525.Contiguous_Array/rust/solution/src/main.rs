@@ -1,3 +1,5 @@
+use rand::Rng;
+
 struct Solution;
 
 impl Solution {
@@ -27,14 +29,25 @@ impl Solution {
                 first_seen_dict.insert(cum_sum, i as i32);
             }
         }
+       //  println!("{} {}", nums.len(), max_span_len);
         return max_span_len;        
     }
 }
 
 fn main() {
-    println!("Hello, world!");
-    let x = Solution::find_max_length(vec![0, 1]);
-    println!("{}", x);
+    // println!("Hello, world!");
+    let num_tests = 100;
+    let each_test_len = 1e5 as usize;
+    let mut sum_of_all = 0;
+    let mut rng = rand::thread_rng();    
+    for _ in 0..num_tests {
+        let test_vec: Vec<i32> = (1..each_test_len)
+            .map(|_| rng.gen_range(0..=1)).collect();
+        // println!("{:?}", test_vec);
+        let x = Solution::find_max_length(test_vec);
+        sum_of_all += x;
+    }
+    println!("rust done! {}", sum_of_all);
 }
 
 
@@ -48,6 +61,7 @@ mod tests {
         assert_eq!(Solution::find_max_length(vec![0,1,0]), 2);
         assert_eq!(Solution::find_max_length(vec![0,1,0,0,1,1,0]), 6);
         assert_eq!(Solution::find_max_length(vec![0,0,0,1,1,1,0]), 6);
+        assert_eq!(Solution::find_max_length(vec![0,1,0,0,0,1,1,0,1,1]), 10);
     }
 
     #[test]
