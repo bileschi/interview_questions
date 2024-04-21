@@ -25,7 +25,7 @@
 # 1 <= nums[i], k <= nums.length
 
 import time
-
+import collections
 def subarraysWithKDistinct(nums, k):
     """
     :type nums: List[int]
@@ -78,7 +78,45 @@ def v3(nums, k):
                 n+=1
     return(n)
 
+def v4(nums, k):
+    nk = v4_helper(nums, k)
+    nk_minus = v4_helper(nums, k-1)
+    return nk - nk_minus
 
+def v4_helper(nums, k):
+    # returns the number of subarrays w/ k *or fewer* uniq
+    if k == 0:
+        return 0
+    # n is how many subarrays w/ k *or fewer* uniq so far.
+    n = 0
+    # i is the left point inclusive.  j is the right point inclusive. We count
+    # all subarrays between i and j which **include point j**. If the span has
+    # more than k unique valueswe increment i until it does not, and continue.
+    i = 0
+    count_in_subarray = collections.Counter()
+    num_non_zero_count = 0
+    for j in range(len(nums)):
+        # j has been incremented .. do the book keeping.
+        v = nums[j]
+        if count_in_subarray[v] == 0:
+            num_non_zero_count += 1
+        count_in_subarray[v] += 1
+        # If the span has more than k unique values, increment i until there
+        # are only k in the valid span.
+        # Do the book keeping to remove the values at
+        # i before incrementing.
+        while num_non_zero_count > k:
+            v = nums[i]
+            count_in_subarray[v] -= 1
+            if count_in_subarray[v] == 0:
+                num_non_zero_count -= 1
+            i+=1
+        # If the span has <= k uniqe values, increment the total with all unque
+        # subarrays that end with k.
+        if num_non_zero_count <= k:
+            n += j - i + 1
+
+    return(n)
 
 
 if __name__ == "__main__":
@@ -102,4 +140,10 @@ if __name__ == "__main__":
     assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
     t2 = time.time()
     print(f"v3 = {t2 - t1:.2f} seconds")
-    
+
+
+    f = v4
+    t1 = time.time()
+    assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
+    t2 = time.time()
+    print(f"v4 = {t2 - t1:.2f} seconds")

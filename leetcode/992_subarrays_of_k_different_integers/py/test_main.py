@@ -19,6 +19,9 @@ class TestMain(unittest.TestCase):
         self.generic_test(f)
     
     def generic_test(self, f):
+        self.assertEqual(f([1], 1), 1)
+        self.assertEqual(f([1, 1], 1), 3)
+        self.assertEqual(f([1, 2], 1), 2)
         self.assertEqual(f([1,2,1,2,3], 2), 7)
         self.assertEqual(f([1,2,1,3,4], 3), 3)
         self.assertEqual(f([1, 1, 2, 2], 2), 4)
