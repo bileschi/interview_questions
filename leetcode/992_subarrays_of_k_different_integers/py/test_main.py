@@ -6,8 +6,8 @@ class TestMain(unittest.TestCase):
         f = main.brute_force
         self.generic_test(f)
     
-    def test_brute_force(self):
-        f = main.brute_force
+    def test_v2(self):
+        f = main.v2
         self.generic_test(f)
     
     def generic_test(self, f):

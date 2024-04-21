@@ -47,10 +47,14 @@ def brute_force(nums, k):
 def v2(nums, k):
     n = 0
     for i in range(len(nums)):
-        for j in range(len(nums)+1):
-            n_unique = len(set(nums[i:j]))
+        vals_so_far = set()
+        for j in range(i, len(nums)):
+            vals_so_far.add(nums[j])
+            n_unique = len(vals_so_far)
             if n_unique == k:
                 n+=1
+            if n_unique > k:
+                break
     return(n)
                                              
 if __name__ == "__main__":
