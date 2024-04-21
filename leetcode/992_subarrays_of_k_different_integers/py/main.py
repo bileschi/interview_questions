@@ -56,20 +56,50 @@ def v2(nums, k):
             if n_unique > k:
                 break
     return(n)
-                                             
+
+def v3(nums, k):
+    n = 0
+    for i in range(len(nums)):
+        unqiue_so_far = set()
+        n_unique = 0
+        for j in range(i, len(nums)):
+            # we already have this value
+            if nums[j] in unqiue_so_far:
+                if n_unique == k:
+                    n+=1
+                continue
+            # new value
+            # if this would push us over, we're done with this i
+            if n_unique == k:
+                break
+            unqiue_so_far.add(nums[j])
+            n_unique += 1
+            if n_unique == k:
+                n+=1
+    return(n)
+
+
+
+
 if __name__ == "__main__":
-    N = 1000
+    N = 10000
     big_array_of_ones = [1] * N
-    f = brute_force
-    t1 = time.time()
-    assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
-    t2 = time.time()
-    print(f"brute force = {t2 - t1:.2f} seconds")
+
+    # f = brute_force
+    # t1 = time.time()
+    # assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
+    # t2 = time.time()
+    # print(f"brute force = {t2 - t1:.2f} seconds")
 
     f = v2
     t1 = time.time()
     assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
     t2 = time.time()
-    print(f"brute force = {t2 - t1:.2f} seconds")
+    print(f"v2 = {t2 - t1:.2f} seconds")
 
+    f = v3
+    t1 = time.time()
+    assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
+    t2 = time.time()
+    print(f"v3 = {t2 - t1:.2f} seconds")
     
