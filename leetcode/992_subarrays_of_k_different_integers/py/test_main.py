@@ -25,6 +25,7 @@ class TestMain(unittest.TestCase):
         self.assertEqual(f([1,2,1,2,3], 2), 7)
         self.assertEqual(f([1,2,1,3,4], 3), 3)
         self.assertEqual(f([1, 1, 2, 2], 2), 4)
+
         self.assertEqual(f([], 3), 0)
         N = 100
         big_array_of_ones = [1] * N
@@ -38,7 +39,6 @@ class TestMain(unittest.TestCase):
         barbell.append(2)
         barbell.extend([3] * size_2)
         self.assertEqual(f(barbell, 3), size_1 * size_2)
-
 
 
 if __name__ == '__main__':
