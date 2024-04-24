@@ -120,8 +120,66 @@ def v4_helper(nums, k):
     return(n)
 
 
+def v5(nums, k):
+    if k == 0:
+        return 0
+    # n is how many subarrays w/ uniq so far.
+    n = 0
+    # [i_k, j] are the end points (inclusive) for subarrays that contain 
+    # *at most* k unique values.
+    # [i_m, j] are the end points (inclusive) for subarrays that contain 
+    # *at most* k-1 unique values.
+
+    # Algo sketch - we increment j until the [i_k, j] span includes
+    # k unique values.  We then count the number of sub arrays containing j.
+    # This set includes spans with k *or fewer* unique values.  We then
+    # increment i_m until the [i_m, j] span contains only k-1 unique values.
+    # We then count the number uf subarrays of this span containing j.
+    # this is the number containing k-1 or fewer unique values.  The
+    # difference between these two counts is the number of sub arrays
+    # with exactly k values that end at point j.
+
+    i_k = 0
+    i_m = 0
+    vals_in_subarray_k = [0] * (len(nums)+1)
+    vals_in_subarray_m = [0] * (len(nums)+1)
+    len_vals_in_subarray_k = 0
+    len_vals_in_subarray_m = 0
+    for j in range(len(nums)):
+        # j has been incremented .. do the book keeping.
+        v = nums[j]
+        if vals_in_subarray_k[v] == 0:
+            len_vals_in_subarray_k += 1
+        vals_in_subarray_k[v] += 1
+        if vals_in_subarray_m[v] == 0:
+            len_vals_in_subarray_m += 1
+        vals_in_subarray_m[v] += 1
+        # If the span has more than k unique values, increment i_k until there
+        # are only k in the valid span.
+        while len_vals_in_subarray_k > k:
+            v = nums[i_k]
+            vals_in_subarray_k[v] -= 1
+            if vals_in_subarray_k[v] == 0:
+                len_vals_in_subarray_k -= 1
+            i_k+=1
+        while len_vals_in_subarray_m > (k-1):
+            v = nums[i_m]
+            vals_in_subarray_m[v] -= 1
+            if vals_in_subarray_m[v] == 0:
+                len_vals_in_subarray_m -= 1
+            i_m+=1
+        # If the [i_k, j] span has k unique values, increment the total and
+        # subtract the num unique in the [i_m, j] span.
+        if len_vals_in_subarray_k == k:
+            # n += num_in_ik_span - num_in_im_span 
+            # n += ((j - i_k) + 1) - ((j - i_m) + 1) 
+            n += (i_m - i_k) 
+    return(n)
+
+
+
 if __name__ == "__main__":
-    N = 10000
+    N = 1234567
     big_array_of_ones = [1] * N
 
     # f = brute_force
@@ -130,17 +188,17 @@ if __name__ == "__main__":
     # t2 = time.time()
     # print(f"brute force = {t2 - t1:.2f} seconds")
 
-    f = v2
-    t1 = time.time()
-    assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
-    t2 = time.time()
-    print(f"v2 = {t2 - t1:.2f} seconds")
+    # f = v2
+    # t1 = time.time()
+    # assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
+    # t2 = time.time()
+    # print(f"v2 = {t2 - t1:.2f} seconds")
 
-    f = v3
-    t1 = time.time()
-    assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
-    t2 = time.time()
-    print(f"v3 = {t2 - t1:.2f} seconds")
+    # f = v3
+    # t1 = time.time()
+    # assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
+    # t2 = time.time()
+    # print(f"v3 = {t2 - t1:.2f} seconds")
 
 
     f = v4
@@ -149,3 +207,8 @@ if __name__ == "__main__":
     t2 = time.time()
     print(f"v4 = {t2 - t1:.2f} seconds")
 
+    f = v5
+    t1 = time.time()
+    assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
+    t2 = time.time()
+    print(f"v5 = {t2 - t1:.2f} seconds")
