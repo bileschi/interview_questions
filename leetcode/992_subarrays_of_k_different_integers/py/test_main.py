@@ -22,6 +22,10 @@ class TestMain(unittest.TestCase):
         f = main.v5
         self.generic_test(f)
     
+    def test_v6(self):
+        f = main.v6
+        self.generic_test(f)
+    
     def generic_test(self, f):
         self.assertEqual(f([1], 1), 1)
         self.assertEqual(f([1, 1], 1), 3)

@@ -176,6 +176,65 @@ def v5(nums, k):
             n += (i_m - i_k) 
     return(n)
 
+def v6(nums, k):
+    # n is how many subarrays w/ uniq so far.
+    n = 0
+    # [i, j] are the end points (inclusive) for a sliding window subarray.
+    #
+    #
+    #  [L] [          C            ]  [ R ]
+    #  (i) (i+1)       ...       (j)  (j+1)
+    #
+
+    # We increment j until there are exactly k elements in the span [i, j].  We
+    # then increment i
+
+    N = len(nums)
+    if N == 0:
+        return 0
+    vals_in_ij_span = [0] * (N+1)
+    num_uniq_in_ij_span = 0
+    n = 0
+    i = 0
+    j = 0
+    valid_i_range = 0
+
+    def add_v(v):
+        nonlocal vals_in_ij_span, num_uniq_in_ij_span
+        if vals_in_ij_span[v] == 0:
+            num_uniq_in_ij_span += 1
+        vals_in_ij_span[v] += 1
+
+    def remove_v(v):
+        nonlocal vals_in_ij_span, num_uniq_in_ij_span
+        vals_in_ij_span[v] -= 1
+        if vals_in_ij_span[v] == 0:
+            num_uniq_in_ij_span -= 1
+
+    while j < N:
+        # add the j'th element.
+        add_v(nums[j])
+        # If we've moved into a region where there are now more than k in the
+        # span, increase the left pointer and reset the size of the valid range.
+        if num_uniq_in_ij_span > k:
+            remove_v(nums[i])
+            i += 1
+            valid_i_range = 0
+        
+        # If the current span has exactly k, continue moving the left pointer
+        # and calculate the size of the range for this region.
+        if num_uniq_in_ij_span == k:
+            # If the span would still be valid if we move the left pointer, do
+            # it.
+            while vals_in_ij_span[nums[i]] > 1:
+                remove_v(nums[i])
+                i += 1
+                valid_i_range += 1
+            n += valid_i_range + 1
+        
+        j += 1
+    return n
+
 
 
 if __name__ == "__main__":
@@ -212,3 +271,9 @@ if __name__ == "__main__":
     assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
     t2 = time.time()
     print(f"v5 = {t2 - t1:.2f} seconds")
+
+    f = v6
+    t1 = time.time()
+    assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
+    t2 = time.time()
+    print(f"v6 = {t2 - t1:.2f} seconds")
