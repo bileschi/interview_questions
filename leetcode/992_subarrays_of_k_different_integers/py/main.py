@@ -26,6 +26,7 @@
 
 import time
 import collections
+import numpy as np
 
 def subarraysWithKDistinct(nums, k):
     """
@@ -198,26 +199,17 @@ def v6(nums, k):
     i = 0
     j = 0
     valid_i_range = 0
-
-    def add_v(v):
-        nonlocal vals_in_ij_span, num_uniq_in_ij_span
-        if vals_in_ij_span[v] == 0:
-            num_uniq_in_ij_span += 1
-        vals_in_ij_span[v] += 1
-
-    def remove_v(v):
-        nonlocal vals_in_ij_span, num_uniq_in_ij_span
-        vals_in_ij_span[v] -= 1
-        if vals_in_ij_span[v] == 0:
-            num_uniq_in_ij_span -= 1
-
     while j < N:
         # add the j'th element.
-        add_v(nums[j])
+        if vals_in_ij_span[nums[j]] == 0:
+            num_uniq_in_ij_span += 1
+        vals_in_ij_span[nums[j]] += 1
         # If we've moved into a region where there are now more than k in the
         # span, increase the left pointer and reset the size of the valid range.
         if num_uniq_in_ij_span > k:
-            remove_v(nums[i])
+            vals_in_ij_span[nums[i]] -= 1
+            if vals_in_ij_span[nums[i]] == 0:
+                num_uniq_in_ij_span -= 1
             i += 1
             valid_i_range = 0
         
@@ -227,7 +219,9 @@ def v6(nums, k):
             # If the span would still be valid if we move the left pointer, do
             # it.
             while vals_in_ij_span[nums[i]] > 1:
-                remove_v(nums[i])
+                vals_in_ij_span[nums[i]] -= 1
+                if vals_in_ij_span[nums[i]] == 0:
+                    num_uniq_in_ij_span -= 1
                 i += 1
                 valid_i_range += 1
             n += valid_i_range + 1
@@ -240,7 +234,8 @@ def v6(nums, k):
 if __name__ == "__main__":
     N = 1234567
     big_array_of_ones = [1] * N
-
+    big_random_array = list(np.random.randint(1, 10, 1234567))
+    
     # f = brute_force
     # t1 = time.time()
     # assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
@@ -259,21 +254,19 @@ if __name__ == "__main__":
     # t2 = time.time()
     # print(f"v3 = {t2 - t1:.2f} seconds")
 
+    def ones_test(f):
+        t1 = time.time()
+        assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
+        t2 = time.time()
+        print(f"ones: {f.__name__} = {t2 - t1:.2f} seconds")
 
-    f = v4
-    t1 = time.time()
-    assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
-    t2 = time.time()
-    print(f"v4 = {t2 - t1:.2f} seconds")
+    def rand_test(f,):
+        t1 = time.time()
+        f(big_random_array, 6)
+        t2 = time.time()
+        print(f"random: {f.__name__} = {t2 - t1:.2f} seconds")
 
-    f = v5
-    t1 = time.time()
-    assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
-    t2 = time.time()
-    print(f"v5 = {t2 - t1:.2f} seconds")
-
-    f = v6
-    t1 = time.time()
-    assert(f(big_array_of_ones, 1) ==  N * (N+1) / 2)
-    t2 = time.time()
-    print(f"v6 = {t2 - t1:.2f} seconds")
+    for f in [v4, v5, v6]:
+        ones_test(f)
+        rand_test(f)
+        print("----")
