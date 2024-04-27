@@ -68,8 +68,15 @@ class IterativeSolution(object):
             v_minus1 = v_0            
         return v_0
 
-Solution = IterativeSolution
-      
+
+Solution = RecursiveSolution
+# Interestingly, the recursive solution is faster than iterative solution
+#
+# $ python3 main.py
+# Iterative = 0.00001907 s
+# Recursive = 0.00000310 s
+
+
 if __name__ == '__main__':
     i_sol = IterativeSolution()
     r_sol = RecursiveSolution()
