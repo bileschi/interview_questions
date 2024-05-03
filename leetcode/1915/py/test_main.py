@@ -9,7 +9,7 @@ class TestMain(unittest.TestCase):
         self.assertEqual(9, s.wonderfulSubstrings(word="aabb"))
         self.assertEqual(2, s.wonderfulSubstrings(word="he"))
         self.assertEqual(
-            3614,
+            5119,
             s.wonderfulSubstrings(
                 word="bibacdfehgbchbjicccecacbdeiggideciijgbahifjjhdeddeabbfihb"
                 "egbagcgbidefijigabfjhbdjfiihggdbjacgjccidedajgaabdibcdfjfjfeif"
@@ -20,13 +20,11 @@ class TestMain(unittest.TestCase):
                 "iccdggbdjjghicagdhceiaebfhjhbefghjjcbjbjbfbbdhhdbdbceejaffbdbi"
                 "daefihcjagaibhihbebhjfggbddhedfcacagegfaiiaeheiggjhfaegffdicge"
                 "babceaahjeegafgjgfejfeheafidabjbgafjcdgffdafcgecjdjefcbhefbfgh"
-                "gsegfegdabjiicihfdbjjiehjfbjfhgaeacjgfbggggjegffgbabafdhbbiadg"
+                "gegfegdabjiicihfdbjjiehjfbjfhgaeacjgfbggggjegffgbabafdhbbiadg"
                 "fcbfcicjagceeibhagieiddjjhcjdidccgjfbgihadhhjihgdaheibigihefac"
                 "fbdgfiefehgjbbcggccfcibhbhhjjagjhehciejafbhjeicaieagjagdaaaddf"
                 "giibgicgjghdjiddaeihbcbccbfjigdjcachhdcgfheaacfhfajefbccgjcdca"
-                "ahjaaedcibbjgggajaceijababjafbaccfiffcbedjc"
-            ),
-        )
+                "ahjaaedcibbjgggajaceijababjafbaccfiffcbedjc"))
 
 
 if __name__ == "__main__":

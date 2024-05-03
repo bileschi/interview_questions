@@ -52,6 +52,7 @@
 # word consists of lowercase English letters from 'a' to 'j'.
 
 import collections
+import numpy as np
 
 class Solution(object):
     def isWonderful(self,word):
@@ -66,6 +67,32 @@ class Solution(object):
         return True
 
     def wonderfulSubstrings(self, word):
+        return self.wonderfulSlidingWindow(word)
+
+    def wonderfulSlidingWindow(self, word):
+        """
+        :type word: str
+        :rtype: int
+        """
+        # sliding window approach.
+        C = np.zeros((10, len(word)), int)
+        for (i, c) in enumerate(word):
+            c_idx = ord(c) - ord('a')
+            C[c_idx, i] = 1
+        CS = np.concatenate((np.zeros((10, 1)), np.cumsum(C, 1)), 1)
+        num = 0
+        # i and j here are end inclusive.
+        for i in range(len(word)):
+            for j in range(i+1, len(word)+1):
+                if sum((CS[:, j] - CS[:, i]) % 2) <= 1:
+                    num += 1
+                else:
+                    pass
+
+        return num
+
+
+    def wonderfulBrute(self, word):
         """
         :type word: str
         :rtype: int
