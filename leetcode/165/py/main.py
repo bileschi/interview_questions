@@ -42,7 +42,7 @@
 #  is "1". 0 < 1, so version1 < version2.
 
 class Solution(object):
-    def compareVersion(self, version1, version2):
+    def compareVersionBrute(self, version1, version2):
         """
         :type version1: str
         :type version2: str
@@ -62,4 +62,44 @@ class Solution(object):
                 return 1
         return 0
         
-        
+    def compareV2(self, version1, version2):
+        """
+        as above, but don't auto pad with strings
+        """
+        sp1 = [int(x) for x in version1.split(".")]
+        sp2 = [int(x) for x in version2.split(".")]
+
+        for i in range(min(len(sp1), len(sp2))):
+            if (sp1[i] < sp2[i]):
+                return -1
+            if (sp1[i] > sp2[i]):
+                return 1
+        for i in range(len(sp2), len(sp1)):
+            if(sp1[i]>0):
+                return 1
+        for i in range(len(sp1), len(sp2)):
+            if(sp2[i]>0):
+                return -1
+        return 0
+
+    def compareV3(self, version1, version2):
+        """
+        as above, but don't convert to string until you have to
+        """
+        sp1 = version1.split(".")
+        sp2 = version2.split(".")
+
+        for i in range(min(len(sp1), len(sp2))):
+            x = int(sp1[i])
+            y = int(sp2[i])
+            if x < y:
+                return -1
+            if (x > y):
+                return 1
+        for i in range(len(sp2), len(sp1)):
+            if int(sp1[i]) > 0:
+                return 1
+        for i in range(len(sp1), len(sp2)):
+            if int(sp2[i]) > 0:
+                return -1
+        return 0
