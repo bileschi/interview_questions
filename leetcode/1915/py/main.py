@@ -67,7 +67,46 @@ class Solution(object):
         return True
 
     def wonderfulSubstrings(self, word):
-        return self.wonderfulSlidingWindow(word)
+        return self.wonderfulBitwise(word)
+
+    def wonderfulBitwise(self, word):
+        """
+        :type word: str
+        :rtype: int
+        """
+        # Create an array that stores the bitwise parity for
+        # each subarray beginning at zero and ending at point i.
+        masks_seen_so_far = collections.Counter()
+        masks_seen_so_far[0] = 1 # Count one for the empty prefix
+        prev_mask = 0
+        num_wonderful_subarrays = 0
+        for c in word:
+            num_w_exact_end_here = 0 
+            num_w_off_one_end_here = 0 
+            # print('######')
+            c_idx = ord(c) - ord('a')
+            # Mask is the parity of the subseq from zero to i
+            mask = prev_mask ^ (1 << c_idx)
+            # We can count an array for all prefixes with either
+            # exactly this mask, as removing that prefix will result in a
+            # fixing all our parity errors.
+            num_w_exact_end_here += masks_seen_so_far[mask]
+            # We can also count an arry for all prefixes with masks that are
+            # "off by one"
+            for one_bad_char in range(10):
+                mask_offset = 1 << one_bad_char
+                num_w_off_one_end_here += masks_seen_so_far[mask ^ mask_offset]
+                # num_wonderful_subarrays += masks_seen_so_far[mask ^ mask_offset]
+            masks_seen_so_far[mask ] += 1
+            num_wonderful_subarrays += num_w_exact_end_here + num_w_off_one_end_here
+            prev_mask = mask
+            # print(c)
+            # print(f'mask {mask}')
+            # print(f'masks_seen_so_far {masks_seen_so_far}')
+            # print(f'num_w_exact_end_here {num_w_exact_end_here}')
+            # print(f'num_w_off_one_end_here {num_w_off_one_end_here}')
+            # print(f'num_wonderful_subarrays {num_wonderful_subarrays}')
+        return num_wonderful_subarrays
 
     def wonderfulSlidingWindow(self, word):
         """
@@ -75,7 +114,7 @@ class Solution(object):
         :rtype: int
         """
         # sliding window approach.
-        C = np.zeros((10, len(word)), int)
+        C = np.false((10, len(word)), bool)
         for (i, c) in enumerate(word):
             c_idx = ord(c) - ord('a')
             C[c_idx, i] = 1
@@ -90,7 +129,6 @@ class Solution(object):
                     pass
 
         return num
-
 
     def wonderfulBrute(self, word):
         """
