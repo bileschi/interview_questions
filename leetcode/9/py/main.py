@@ -24,12 +24,25 @@
 
 class Solution(object):
     def isPalindrome(self, x):
+        return self.isPalindromeString(x)
+
+    def isPalindromeString(self, x):
         """
         :type x: int
         :rtype: bool
         """
         fwd = str(x)
         rev = fwd[-1::-1]
-        print(fwd)
-        print(rev)
         return(fwd == rev)
+
+    def isPalindromeNoString(self, x):
+        if x < 0:
+            return False
+        tmp = x
+        y = 0
+        while tmp > 0:
+            y *= 10
+            y += tmp % 10
+            tmp = tmp // 10
+        return x == y
+        
