@@ -27,12 +27,9 @@
 # words[i] consists only of lowercase English letters.
 import collections
 
-class Solution(object):
-    def share_letter(self, w1, w2, word_to_bitstring):
-        bs1 = word_to_bitstring[w1]
-        bs2 = word_to_bitstring[w2]
-        return bs1 & bs2 > 0
+ScheduleItem = collections.namedtuple("ScheduleItem", ["prod", "len1", "len2"]) 
 
+class Solution(object):
     def maxProduct(self, words):
         """
         :type words: List[str]
@@ -54,23 +51,35 @@ class Solution(object):
             len_to_words[len(w)].append(w)
         lens = len_to_words.keys()
         schedule_set = set()
+        # Each schedule item has the form (prod, len1, len2)
         for len1 in lens:
             for len2 in lens:
-                schedule_set.add((len1 * len2, len1, len2))
+                if len1 >= len2:
+                    schedule_set.add(ScheduleItem(
+                        prod=len1 * len2,
+                        len1=len1,
+                        len2=len2))
         sorted_schedule = []
         for x in schedule_set:
             sorted_schedule.append(x)
-        sorted_schedule.sort(key = lambda x : -x[0])
+        sorted_schedule.sort(key = lambda x : x.prod, reverse=True)
 
         # compare words along schedule
         for s in sorted_schedule:
-            wl1 = len_to_words[s[1]]
-            wl2 = len_to_words[s[2]]
-            prod_len = s[0]
-            for w1 in wl1:
-                for w2 in wl2:
-                    if not self.share_letter(w1, w2, word_to_bitstring):
-                        return(prod_len)
+            # if len1 == len2, we can skip some of the comparisons
+            if s.len1 == s.len2:
+                wl = len_to_words[s.len1]
+                for i1, w1 in enumerate(wl):
+                    for w2 in wl[(i1+1):]:
+                        if not word_to_bitstring[w1] & word_to_bitstring[w2]:
+                            return(s.prod)
+            else:
+                wl1 = len_to_words[s.len1]
+                wl2 = len_to_words[s.len2]
+                for w1 in wl1:
+                    for w2 in wl2:
+                        if not word_to_bitstring[w1] & word_to_bitstring[w2]:
+                            return(s.prod)
         return 0
 
 
