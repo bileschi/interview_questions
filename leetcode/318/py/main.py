@@ -39,6 +39,7 @@ class Solution(object):
         :rtype: int
         """
         len_to_words = collections.defaultdict(list)
+        # convert all words to bitstrings for faster comparison
         word_to_bitstring = {}
         for w in words:
             s = set(w)
@@ -46,9 +47,11 @@ class Solution(object):
             for c in s:
                 bitstring = bitstring | (1 << ord(c) - ord('a'))
             word_to_bitstring[w] = bitstring
+
+        # Schedule comparisons in order of decreasing product of length
+        # so as to enable short circult.
         for w in words:
             len_to_words[len(w)].append(w)
-        
         lens = len_to_words.keys()
         schedule_set = set()
         for len1 in lens:
@@ -59,6 +62,7 @@ class Solution(object):
             sorted_schedule.append(x)
         sorted_schedule.sort(key = lambda x : -x[0])
 
+        # compare words along schedule
         for s in sorted_schedule:
             wl1 = len_to_words[s[1]]
             wl2 = len_to_words[s[2]]
@@ -68,5 +72,5 @@ class Solution(object):
                     if not self.share_letter(w1, w2, word_to_bitstring):
                         return(prod_len)
         return 0
-            
+
 
