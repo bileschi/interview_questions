@@ -1,4 +1,4 @@
-# Solution to leetcode problem $$DIGIT_GOES_HERE$$
+# Solution to leetcode problem DIGIT_GOES_HERE
 
 class Solution(object):
  
