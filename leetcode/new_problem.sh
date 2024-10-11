@@ -10,15 +10,15 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# Usage message.
 if [ "$#" -ne 1 ]; then
     echo "Usage: new_problem.sh <problem_number>"
     echo "Example: new_problem.sh 1"
     exit 1
 fi
 
-# Parse command line arguments
-verbose=false
-
+# Check argument.  It should be an integer from 0 to 9999.  Prefix the integer
+# with zeros to make it four characters long.
 format_digit() {
     local digit=$1
     if [[ ! -z "${digit//[0-9]/}" ]]; then
@@ -41,11 +41,6 @@ format_digit() {
 
 # Main function
 main() {
-    # Your script logic here
-    if $verbose; then
-        echo "Processing file: $file"
-    fi
-
     # Check the input and convert to a four character digit.
     local digit=$(format_digit "$1")
     echo "$digit"
@@ -55,9 +50,10 @@ main() {
 
     # Copy the python template
     cp -R template/py "problemsets/$digit/py/"
-    # Replace the string $$DIGIT_GOES_HERE$$ with the problem number
-    sed -i '' "s/\$\$DIGIT_GOES_HERE\$\$/$1/g" "problemsets/$digit/py/main.py"
-    sed -i '' "s/\$\$DIGIT_GOES_HERE\$\$/$1/g" "problemsets/$digit/py/test_main.py"
+
+    # Replace the string DIGIT_GOES_HERE with the problem number
+    sed -i '' "s/DIGIT_GOES_HERE/$digit/g" "problemsets/$digit/py/main.py"
+    sed -i '' "s/DIGIT_GOES_HERE/$digit/g" "problemsets/$digit/py/test_main.py"
 
     # Create the rust version
     mkdir -p "problemsets/$digit/rust"
