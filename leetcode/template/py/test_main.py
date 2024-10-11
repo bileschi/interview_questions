@@ -1,4 +1,4 @@
-# Tests for leetcode problem $$DIGIT_GOES_HERE$$
+# Tests for leetcode problem DIGIT_GOES_HERE
 
 import main
 import unittest
