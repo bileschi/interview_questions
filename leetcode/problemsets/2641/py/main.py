@@ -18,13 +18,16 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional
 from collections import defaultdict
 
+
 @dataclass
 class TreeNode:
     val: int = 0
-    left: Optional['TreeNode'] = None
-    right: Optional['TreeNode'] = None
+    left: Optional["TreeNode"] = None
+    right: Optional["TreeNode"] = None
+
 
 DBPRINT = False
+
 
 def dbprint(*args, **kwargs):
     if DBPRINT:
@@ -32,7 +35,10 @@ def dbprint(*args, **kwargs):
     else:
         pass
 
+
 def sum_at_depth(root: Optional[TreeNode]) -> List[int]:
+    # Performs a DFS to fill a list summing the values at each depth.
+    # Uses a helper function with a more convenient signature for recursion.
     if root is None:
         return []
     sums = defaultdict(int)
@@ -44,19 +50,23 @@ def sum_at_depth(root: Optional[TreeNode]) -> List[int]:
     return l
 
 
-def _sum_at_depth_helper(root: Optional[TreeNode], this_depth: int, sums: Dict[int, int]):
+def _sum_at_depth_helper(
+    root: Optional[TreeNode], this_depth: int, sums: Dict[int, int]
+):
+    # Helper function for sum_at_depth
     if root is None:
         return
     sums[this_depth] += root.val
     if root.left:
-        _sum_at_depth_helper(root.left, this_depth+1, sums)
+        _sum_at_depth_helper(root.left, this_depth + 1, sums)
     if root.right:
-        _sum_at_depth_helper(root.right, this_depth+1, sums)
+        _sum_at_depth_helper(root.right, this_depth + 1, sums)
 
 
 class Solution_too_much_memory:
     # Note that an inplace version of this is also works, but still fails the
-    # memory boundary.  The issue is probably with the number of recursive calls
+    # memory boundary in leetcoade.  The issue not the duplication of the tree,
+    # but probably with the number of recursive calls blowing out the stack.
     def replaceValueInTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         # Given the root of a binary tree, replace the value of each node in the tree
         # with the sum of all its cousins' values.
@@ -70,14 +80,17 @@ class Solution_too_much_memory:
             return None
         new_root = TreeNode(0)
         sad = sum_at_depth(root)
-        dbprint(f'{sad=}')
-        def _replaceValueInTreeHelper(old_root: TreeNode, new_root: TreeNode, sad: List[int]) -> None:
+        dbprint(f"{sad=}")
+
+        def _replaceValueInTreeHelper(
+            old_root: TreeNode, new_root: TreeNode, sad: List[int]
+        ) -> None:
             if old_root == None:
                 return
             dbprint(f"at {old_root.val=}")
             # Handles the two children of this root.  Replaces thier values
             # with the sum at their depth minus their sums.
-            if old_root.left == None and old_root.right == None:   
+            if old_root.left == None and old_root.right == None:
                 # This node has no children - there is nothing to do.
                 return
             new_kids_val = sad[1]
@@ -86,19 +99,23 @@ class Solution_too_much_memory:
             # Compute kids value
             if old_root.left:
                 left_kid_val = old_root.left.val
-            if old_root.right: 
+            if old_root.right:
                 right_kid_val = old_root.right.val
             new_kids_val = sad[1] - left_kid_val - right_kid_val
             if old_root.left:
-                dbprint(f" minting new left {sad[1]=}, {left_kid_val=}, {right_kid_val=}, {new_kids_val=}")
+                dbprint(
+                    f" minting new left {sad[1]=}, {left_kid_val=}, {right_kid_val=}, {new_kids_val=}"
+                )
                 new_root.left = TreeNode(new_kids_val)
             if old_root.right:
-                dbprint(f" minting new right {sad[1]=}, {left_kid_val=}, {right_kid_val=}, {new_kids_val=}")
+                dbprint(
+                    f" minting new right {sad[1]=}, {left_kid_val=}, {right_kid_val=}, {new_kids_val=}"
+                )
                 new_root.right = TreeNode(new_kids_val)
             # Kids are handled.  Take care of grandkids.
             _replaceValueInTreeHelper(old_root.left, new_root.left, sad[1:])
             _replaceValueInTreeHelper(old_root.right, new_root.right, sad[1:])
-        
+
         _replaceValueInTreeHelper(root, new_root, sad)
         return new_root
 
@@ -122,7 +139,7 @@ class Solution:
         new_root = root
         root.val = 0
         sad = sum_at_depth(root)
-        dbprint(f'{sad=}')
+        dbprint(f"{sad=}")
         queue = [(root, 1)]
 
         def _replaceValueInTreeHelper(old_root: TreeNode, depth: int) -> None:
@@ -131,7 +148,7 @@ class Solution:
             dbprint(f"at {old_root.val=}")
             # Handles the two children of this root.  Replaces thier values
             # with the sum at their depth minus their sums.
-            if old_root.left == None and old_root.right == None:   
+            if old_root.left == None and old_root.right == None:
                 # This node has no children - there is nothing to do.
                 return
             left_kid_val = 0
@@ -139,17 +156,21 @@ class Solution:
             # Compute kids value
             if old_root.left:
                 left_kid_val = old_root.left.val
-            if old_root.right: 
+            if old_root.right:
                 right_kid_val = old_root.right.val
             new_kids_val = sad[depth] - left_kid_val - right_kid_val
             if old_root.left:
-                dbprint(f" minting new left {sad[1]=}, {left_kid_val=}, {right_kid_val=}, {new_kids_val=}")
+                dbprint(
+                    f" minting new left {sad[1]=}, {left_kid_val=}, {right_kid_val=}, {new_kids_val=}"
+                )
                 old_root.left.val = new_kids_val
-                queue.append((old_root.left, depth+1))
+                queue.append((old_root.left, depth + 1))
             if old_root.right:
-                dbprint(f" minting new right {sad[1]=}, {left_kid_val=}, {right_kid_val=}, {new_kids_val=}")
+                dbprint(
+                    f" minting new right {sad[1]=}, {left_kid_val=}, {right_kid_val=}, {new_kids_val=}"
+                )
                 old_root.right.val = new_kids_val
-                queue.append((old_root.right, depth+1))
+                queue.append((old_root.right, depth + 1))
 
         while queue:
             node, depth = queue.pop(0)
