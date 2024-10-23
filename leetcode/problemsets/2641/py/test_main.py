@@ -52,20 +52,20 @@ class TestMain(unittest.TestCase):
 
 
     def test_replace_value_in_tree_edges(self):
-        s = main.Solution()
+        s = main.Solution_too_much_memory()
         self.assertTrue(equal_trees(s.replaceValueInTree(None), None))
         self.assertTrue(equal_trees(s.replaceValueInTree(TreeNode(1)), TreeNode(0)))
 
     def test_replace_value_in_tree__case_1(self):
-        s = main.Solution()
+        s = main.Solution_too_much_memory()
         self.assertTrue(equal_trees(s.replaceValueInTree(input_one), output_one))
 
     def test_replace_value_in_tree__case_2(self):
-        s = main.Solution()
+        s = main.Solution_too_much_memory()
         self.assertTrue(equal_trees(s.replaceValueInTree(input_two), output_two))
 
     def test_replace_value_in_tree__case_3(self):
-        s = main.Solution()
+        s = main.Solution_too_much_memory()
         self.assertTrue(equal_trees(s.replaceValueInTree(input_three), output_three))
 
 if __name__ == '__main__':
