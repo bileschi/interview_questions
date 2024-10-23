@@ -37,6 +37,11 @@ output_three = TreeNode(0,
 
 
 class TestMain(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.s1 = main.Solution_too_much_memory()    
+        cls.s2 = main.Solution()    
+
     def test_equal_trees(self):
         self.assertTrue(equal_trees(None, None))
         self.assertTrue(equal_trees(one_two_three, one_two_three))
@@ -52,21 +57,25 @@ class TestMain(unittest.TestCase):
 
 
     def test_replace_value_in_tree_edges(self):
-        s = main.Solution_too_much_memory()
-        self.assertTrue(equal_trees(s.replaceValueInTree(None), None))
-        self.assertTrue(equal_trees(s.replaceValueInTree(TreeNode(1)), TreeNode(0)))
+        for s in [self.s1, self.s2]:
+            with self.subTest(s=s):
+                self.assertTrue(equal_trees(s.replaceValueInTree(None), None))
+                self.assertTrue(equal_trees(s.replaceValueInTree(TreeNode(1)), TreeNode(0)))
 
     def test_replace_value_in_tree__case_1(self):
-        s = main.Solution_too_much_memory()
-        self.assertTrue(equal_trees(s.replaceValueInTree(input_one), output_one))
+        for s in [self.s1, self.s2]:
+            with self.subTest(s=s):
+                self.assertTrue(equal_trees(s.replaceValueInTree(input_one), output_one))
 
     def test_replace_value_in_tree__case_2(self):
-        s = main.Solution_too_much_memory()
-        self.assertTrue(equal_trees(s.replaceValueInTree(input_two), output_two))
+        for s in [self.s1, self.s2]:
+            with self.subTest(s=s):
+                self.assertTrue(equal_trees(s.replaceValueInTree(input_two), output_two))
 
     def test_replace_value_in_tree__case_3(self):
-        s = main.Solution_too_much_memory()
-        self.assertTrue(equal_trees(s.replaceValueInTree(input_three), output_three))
+        for s in [self.s1, self.s2]:
+            with self.subTest(s=s):
+                self.assertTrue(equal_trees(s.replaceValueInTree(input_three), output_three))
 
 if __name__ == '__main__':
     unittest.main()
