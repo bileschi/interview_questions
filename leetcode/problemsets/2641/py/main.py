@@ -26,7 +26,7 @@ class TreeNode:
     right: Optional["TreeNode"] = None
 
 
-DBPRINT = False
+DBPRINT = True
 
 
 def dbprint(*args, **kwargs):
@@ -214,12 +214,12 @@ class Solution3:
                     children_sum += node.right.val
                 if node.left:
                     dbprint(
-                        f" Enquing left node ({node.val=}, {children_sum=})"
+                        f" Enquing left node ({node.left.val=}, {children_sum=})"
                     )
                     q.append((node.left, children_sum))
                 if node.right:
                     dbprint(
-                        f" Enquing right node ({node.val=}, {children_sum=})"
+                        f" Enquing right node ({node.right.val=}, {children_sum=})"
                     )
                     q.append((node.right, children_sum))
         return root
