@@ -80,7 +80,7 @@ def build_matrix(row_order: List[int], col_order: List[int]) -> List[List[int]]:
     for i in range(1, k+1):
         matrix[val_to_row[i]][val_to_col[i]] = i
     return matrix
-                                                                     
+
 
 class Solution(object):
     def buildMatrix(self, k, rowConditions, colConditions):
@@ -100,6 +100,7 @@ class Solution(object):
             return []
         matrix = build_matrix(row_order, col_order)
         return matrix
+
 
 
 """
