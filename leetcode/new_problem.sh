@@ -58,6 +58,9 @@ main() {
     # Create the rust version
     mkdir -p "problemsets/$digit/rust"
     cargo new "problemsets/$digit/rust/solution"
+    # Copy the rust template (to get the testing pattern)
+    cp -R template/rust/main.rs "problemsets/$digit/rust/solution/src/main.rs"
+
     
     # Print the commands to run the tests
     echo ""
