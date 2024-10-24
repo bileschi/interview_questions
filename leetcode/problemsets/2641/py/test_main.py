@@ -6,10 +6,6 @@ import unittest
 from main import TreeNode
 from typing import Optional
 
-two = TreeNode(2)
-three = TreeNode(3)
-one_two_three = TreeNode(1, two, three)
-
 
 def equal_trees(tree1: Optional[TreeNode], tree2: Optional[TreeNode]):
     if tree1 is None or tree2 is None:
@@ -19,6 +15,10 @@ def equal_trees(tree1: Optional[TreeNode], tree2: Optional[TreeNode]):
         return False
     return equal_trees(tree1.left, tree2.left) and equal_trees(tree1.right, tree2.right)
 
+
+two = TreeNode(2)
+three = TreeNode(3)
+one_two_three = TreeNode(1, two, three)
 
 input_one = TreeNode(
     5, TreeNode(4, TreeNode(1), TreeNode(10)), TreeNode(9, None, TreeNode(7))
@@ -39,7 +39,12 @@ class TestMain(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.s1 = main.Solution_too_much_memory()
-        cls.s2 = main.Solution()
+        cls.s2 = main.Solution2()
+        cls.s3 = main.Solution3()
+        # TODO: Because the solotions overwrite the data, the tests data must be
+        # reconstructed before each test.
+        # cls.sols = [cls.s1, cls.s2, cls.s3]
+        cls.sols = [cls.s3]
 
     def test_equal_trees(self):
         self.assertTrue(equal_trees(None, None))
@@ -54,7 +59,7 @@ class TestMain(unittest.TestCase):
         self.assertEqual(main.sum_at_depth(one_two_three), [1, 5])
 
     def test_replace_value_in_tree_edges(self):
-        for s in [self.s1, self.s2]:
+        for s in self.sols:
             with self.subTest(s=s):
                 self.assertTrue(equal_trees(s.replaceValueInTree(None), None))
                 self.assertTrue(
@@ -62,21 +67,21 @@ class TestMain(unittest.TestCase):
                 )
 
     def test_replace_value_in_tree__case_1(self):
-        for s in [self.s1, self.s2]:
+        for s in self.sols:
             with self.subTest(s=s):
                 self.assertTrue(
                     equal_trees(s.replaceValueInTree(input_one), output_one)
                 )
 
     def test_replace_value_in_tree__case_2(self):
-        for s in [self.s1, self.s2]:
+        for s in self.sols:
             with self.subTest(s=s):
                 self.assertTrue(
                     equal_trees(s.replaceValueInTree(input_two), output_two)
                 )
 
     def test_replace_value_in_tree__case_3(self):
-        for s in [self.s1, self.s2]:
+        for s in self.sols:
             with self.subTest(s=s):
                 self.assertTrue(
                     equal_trees(s.replaceValueInTree(input_three), output_three)

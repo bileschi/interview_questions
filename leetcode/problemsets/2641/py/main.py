@@ -16,7 +16,7 @@
 
 from dataclasses import dataclass
 from typing import Dict, List, Optional
-from collections import defaultdict
+from collections import defaultdict, deque
 
 
 @dataclass
@@ -120,20 +120,20 @@ class Solution_too_much_memory:
         return new_root
 
 
-class Solution:
-    # Inplace version of the above.  replaces recursion with a stack.
+class Solution2:
+    # Inplace version of the above. Replaces recursion with a stack.
     #
     # Note that in place solutions are more difficult to test as they
     # overwrite the test data with the results.
     def replaceValueInTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        # Given the root of a binary tree, replace the value of each node in the tree
-        # with the sum of all its cousins' values.
+        # Given the root of a binary tree, replace the value of each node in the
+        # tree with the sum of all its cousins' values.
         #
-        # Two nodes of a binary tree are cousins if they have the same depth with
-        # different parents.
+        # Two nodes of a binary tree are cousins if they have the same depth
+        # with different parents.
         #
-        # The value at each node should be the sum of the values at the same depth
-        # minus its own value and it's siblings' values.
+        # The value at each node should be the sum of the values at the same
+        # depth minus its own value and it's siblings' values.
         if root == None:
             return None
         new_root = root
@@ -176,3 +176,50 @@ class Solution:
             node, depth = queue.pop(0)
             _replaceValueInTreeHelper(node, depth)
         return new_root
+
+
+class Solution3:
+    # Improvement over `Solution` that removes the helper function and
+    # some unnecessary variables.
+    def replaceValueInTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if root is None:
+            return None
+        q = deque()  # (node, siblings_sum)
+        q.append((root, root.val + 0))  # root has zero siblings
+
+        while q:
+            # At this point in the code, all the nodes in the queue are at the
+            # same depth.
+            n_at_this_depth = len(q)
+            level_sum = 0
+            for node, _ in q:
+                level_sum += node.val
+
+            # For every element in this depth:
+            #   0. Remove it from the queue.
+            #   1. Replace its value with (level_sum - siblings_sum).
+            #   2. Calculate the sum of its children.
+            #   3. Enclude the children in the queue.
+            for _ in range(n_at_this_depth):
+                node, siblings_sum = q.popleft()
+                dbprint(
+                    f"Changing node {node.val=} to {level_sum=} - {siblings_sum=} ({level_sum-siblings_sum})"
+                )
+
+                node.val = level_sum - siblings_sum
+                children_sum = 0
+                if node.left:
+                    children_sum += node.left.val
+                if node.right:
+                    children_sum += node.right.val
+                if node.left:
+                    dbprint(
+                        f" Enquing left node ({node.val=}, {children_sum=})"
+                    )
+                    q.append((node.left, children_sum))
+                if node.right:
+                    dbprint(
+                        f" Enquing right node ({node.val=}, {children_sum=})"
+                    )
+                    q.append((node.right, children_sum))
+        return root
