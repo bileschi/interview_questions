@@ -14,7 +14,8 @@ def a_is_prefix_of_b(a, b):
         return False
     if len(a) > len(b):
         return False
-    return all([x == y for (x, y) in zip(a, b)])
+    return not any([x != y for (x, y) in zip(a, b)])
+    #return all([x == y for (x, y) in zip(a, b)])
     
 class Solution:
     def removeSubfolders(self, folder: List[str]) -> List[str]:
@@ -29,3 +30,19 @@ class Solution:
                 prev_prefix = f
                 no_prefix_folders.append(folder[i_f])
         return no_prefix_folders
+    
+class SolutionOneLine:
+    def xremoveSubfolders(self, a: List[str]) -> List[str]:
+        return (q:='_') and [q:=v for v in sorted(a) if v.find(q+'/')]
+    def removeSubfolders(self, a: List[str]) -> List[str]:
+        q= '_'
+        retval = []
+        for v in sorted(a):
+            print(f"{q=}, {v=}, {v.find(q+'/')=}")
+            if v.find(q+'/'):
+                print(f"appending {v=}")
+                q = v
+                retval.append(v)
+            else:
+                print(f"skipping {v=}")
+        return retval
