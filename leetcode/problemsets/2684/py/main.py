@@ -32,7 +32,6 @@ class Solution(object):
             for i in range(m):
                 if currentColumnReachable[i]:
                     for j in reversed(range(-1, 2)):
-                        # if nextColumnReachable[i+j]: break # Short if we have already reached this cell
                         if (i+j >= 0) and (i+j < m) and (grid[i+j][currentColumnIdx+1] > grid[i][currentColumnIdx]):
                             nextColumnReachable[i+j] = True
                             maxColumnIdx = currentColumnIdx+1
