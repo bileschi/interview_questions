@@ -1,4 +1,6 @@
 // Solution to leetcode problem DIGIT_GOES_HERE
+//
+// cargo run --manifest-path problemsets/DIGIT_GOES_HERE/rust/solution/Cargo.toml"
 
 struct Solution;
 impl Solution {
