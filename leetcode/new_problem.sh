@@ -51,15 +51,16 @@ main() {
     # Copy the python template
     cp -R template/py "problemsets/$digit/py/"
 
-    # Replace the string DIGIT_GOES_HERE with the problem number
-    sed -i '' "s/DIGIT_GOES_HERE/$digit/g" "problemsets/$digit/py/main.py"
-    sed -i '' "s/DIGIT_GOES_HERE/$digit/g" "problemsets/$digit/py/test_main.py"
-
     # Create the rust version
     mkdir -p "problemsets/$digit/rust"
     cargo new "problemsets/$digit/rust/solution"
     # Copy the rust template (to get the testing pattern)
     cp -R template/rust/main.rs "problemsets/$digit/rust/solution/src/main.rs"
+
+    # Replace the string DIGIT_GOES_HERE with the problem number
+    sed -i '' "s/DIGIT_GOES_HERE/$digit/g" "problemsets/$digit/py/main.py"
+    sed -i '' "s/DIGIT_GOES_HERE/$digit/g" "problemsets/$digit/py/test_main.py"
+    sed -i '' "s/DIGIT_GOES_HERE/$digit/g" "problemsets/$digit/rust/solution/src/main.rs"
 
     
     # Print the commands to run the tests
