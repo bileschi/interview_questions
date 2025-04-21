@@ -1,4 +1,6 @@
 // Solution to leetcode problem 2275
+//
+// 15ms
 
 struct Solution;
 impl Solution {
